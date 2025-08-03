@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { ChevronRight, type LucideIcon } from "lucide-react";
 
 import {
   Collapsible,
@@ -15,22 +15,34 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "valkoma-package/primitive"
+} from "valkoma-package/primitive";
 
 export function NavMain({
   items,
 }: {
   items: {
-    title: string
-    url: string
-    icon: LucideIcon
-    isActive?: boolean
+    title: string;
+    url: string;
+    icon: LucideIcon;
+    isActive?: boolean;
     items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+      title: string;
+      url: string;
+      isActive?: boolean;
+    }[];
+  }[];
 }) {
+  const handleNavigation = (url: string) => {
+    if (url.startsWith('/')) {
+      const [path, target] = url.split('#');
+      window.postMessage({
+        type: 'navigate',
+        path: path || '/',
+        target: target || null
+      }, '*');
+    }
+  };
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Components</SidebarGroupLabel>
@@ -38,8 +50,13 @@ export function NavMain({
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
+              <SidebarMenuButton 
+                asChild 
+                tooltip={item.title}
+                onClick={() => handleNavigation(item.url)}
+                className={item.isActive ? "bg-accent text-accent-foreground" : ""}
+              >
+                <a href={item.url} onClick={(e) => e.preventDefault()}>
                   <item.icon />
                   <span>{item.title}</span>
                 </a>
@@ -56,8 +73,12 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                          <SidebarMenuSubButton 
+                            asChild
+                            onClick={() => handleNavigation(subItem.url)}
+                            className={subItem.isActive ? "bg-accent text-accent-foreground" : ""}
+                          >
+                            <a href={subItem.url} onClick={(e) => e.preventDefault()}>
                               <span>{subItem.title}</span>
                             </a>
                           </SidebarMenuSubButton>
@@ -72,5 +93,5 @@ export function NavMain({
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }
