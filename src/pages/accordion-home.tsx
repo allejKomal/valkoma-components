@@ -1,4 +1,4 @@
-import { Accordion } from "@/components/ds/accordion";
+import { Accordion } from "valkoma-package/design-system";
 import { ComponentShowcase } from "@/components/component-showcase";
 import { PropsTable } from "@/components/props-table";
 import { ArrowRightIcon, InfoIcon } from "lucide-react";

@@ -60,8 +60,8 @@ importers:
         specifier: ^4.1.11
         version: 4.1.11
       valkoma-package:
-        specifier: ^0.1.15
-        version: 0.1.15(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss-animate@1.0.7(tailwindcss@4.1.11))(tailwindcss@4.1.11)
+        specifier: ^0.1.16
+        version: 0.1.16(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss-animate@1.0.7(tailwindcss@4.1.11))(tailwindcss@4.1.11)
     devDependencies:
       '@eslint/js':
         specifier: ^9.30.1
@@ -2353,8 +2353,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  valkoma-package@0.1.15:
-    resolution: {integrity: sha512-DnzWqaV+2GBTEx+RgkgCZ7uQStADDWRM81NK1jZz3gC+zwf2fFB00W92jKr5gsF/hmdZR4ZjoLGi7a5rK8fp8g==}
+  valkoma-package@0.1.16:
+    resolution: {integrity: sha512-gz9wOLJMK75qBnUSmy6g4i0RDm88h9yci5j1tFjYeDMsyC59II5QzQ3x4U/2KXArCkka1pe5l8TAes7zNq43PA==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -4585,7 +4585,7 @@ snapshots:
     dependencies:
       react: 19.1.0
 
-  valkoma-package@0.1.15(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss-animate@1.0.7(tailwindcss@4.1.11))(tailwindcss@4.1.11):
+  valkoma-package@0.1.16(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss-animate@1.0.7(tailwindcss@4.1.11))(tailwindcss@4.1.11):
     dependencies:
       '@hookform/resolvers': 5.2.0(react-hook-form@7.61.1(react@19.1.0))
       '@radix-ui/react-accordion': 1.2.11(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
