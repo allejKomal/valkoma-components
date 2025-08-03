@@ -7,7 +7,7 @@ import Layout from "./components/layout";
 function App() {
   return (
     <ThemeProvider showLoader={false}>
-      <div className="fixed bottom-4 left-4 z-50">
+      <div className="fixed bottom-4 right-4 z-50">
         <ModeToggle />
       </div>
       <Layout />
