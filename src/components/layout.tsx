@@ -8,9 +8,11 @@ import {
 import { AppSidebar } from "./app-sidebar";
 import Home from "@/pages/home";
 import AccordionHome from "@/pages/accordion-home";
+import AlertHome from "@/pages/alert-home";
+import MultiSelectHome from "@/pages/multi-select-home";
 
 export default function Layout() {
-  const [currentPage, setCurrentPage] = useState("accordion");
+  const [currentPage, setCurrentPage] = useState("multi-select");
   const [scrollTarget, setScrollTarget] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
@@ -26,6 +28,8 @@ export default function Layout() {
           setCurrentPage("home");
         } else if (path === "/alert") {
           setCurrentPage("alert");
+        } else if (path === "/multi-select") {
+          setCurrentPage("multi-select");
         } else if (path === "/button") {
           setCurrentPage("button");
         } else if (path === "/card") {
@@ -121,9 +125,9 @@ export default function Layout() {
       case "accordion":
         return <AccordionHome />;
       case "alert":
-        return (
-          <div className="p-8 text-center">Alert Component - Coming Soon</div>
-        );
+        return <AlertHome />;
+      case "multi-select":
+        return <MultiSelectHome />;
       case "button":
         return (
           <div className="p-8 text-center">Button Component - Coming Soon</div>

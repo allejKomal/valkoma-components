@@ -8,6 +8,7 @@ import {
   CollapsibleContent,
 } from "valkoma-package/primitive";
 import { Copy, Check, Code } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 function normalizeIndent(code: string) {
   const lines = code.split("\n");
@@ -22,22 +23,32 @@ export function ComponentShowcase({
   children,
   title,
   description,
+  code: codeProp,
+  headerComponent,
+  childrenClassName,
   id,
 }: {
   children: React.ReactElement;
   title: string;
   description?: string;
+  code?: string;
+  headerComponent?: React.ReactNode;
+  childrenClassName?: string;
   id?: string;
 }) {
   const [showCode, setShowCode] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
 
-  const raw = jsxToString(children, {
-    showFunctions: true,
-    useBooleanShorthandSyntax: false,
-    sortProps: false,
-    tabStop: 2,
-  });
+  const raw =
+    typeof codeProp === "string"
+      ? codeProp
+      : jsxToString(children, {
+        showFunctions: true,
+        useBooleanShorthandSyntax: false,
+        sortProps: false,
+        tabStop: 2,
+      });
+
   const code = normalizeIndent(raw);
 
   const copyToClipboard = async () => {
@@ -87,7 +98,10 @@ export function ComponentShowcase({
       <div className="overflow-hidden smooth-transition">
         <div className="relative my-10 px-5 flex justify-center">
           <div className="relative w-full inline-block border p-6 bg-background text-foreground z-10">
-            {children}
+            {headerComponent}
+            <div className={cn("flex items-center justify-center", childrenClassName)}>
+              {children}
+            </div>
 
             {/* Top left extension */}
             <span className="absolute -top-px -left-[40px] w-[40px] h-px bg-border" />

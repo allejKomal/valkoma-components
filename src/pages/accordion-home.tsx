@@ -162,7 +162,7 @@ export default function AccordionHome() {
 
                 {/* Props Documentation */}
                 <section id="props-documentation" className="pb-20">
-                    <span className="text-2xl font-semibold text-gray-900 mb-6">
+                    <span className="text-2xl font-semibold mb-6">
                         Props Documentation
                     </span>
                     <PropsTable
