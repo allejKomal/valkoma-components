@@ -20,7 +20,6 @@ export default function AlertHome() {
             </div>
 
             <div className="mx-auto space-y-12 px-10">
-
                 <ComponentShowcase
                     id="default-alert"
                     title="Default Alert"

@@ -2,6 +2,9 @@
 
 import * as React from "react";
 import jsxToString from "react-element-to-jsx-string";
+import { createLowlight } from "lowlight";
+// import 'highlight.js/styles/a11y-dark.css';
+import ts from "highlight.js/lib/languages/typescript";
 import {
   Button,
   Collapsible,
@@ -9,6 +12,57 @@ import {
 } from "valkoma-package/primitive";
 import { Copy, Check, Code } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const lowlight = createLowlight();
+lowlight.register("ts", ts);
+
+
+interface ASTNode {
+  type: string;
+  value?: string;
+  tagName?: string;
+  properties?: { className?: string[] };
+  children?: ASTNode[];
+}
+
+// Function to convert lowlight AST to HTML string
+function astToHtml(node: ASTNode): string {
+  if (node.type === "text") {
+    return node.value || "";
+  }
+
+  if (node.type === "element") {
+    const className = node.properties?.className
+      ? ` class="${node.properties.className.join(" ")}"`
+      : "";
+    const children = node.children ? node.children.map(astToHtml).join("") : "";
+    return `<${node.tagName}${className}>${children}</${node.tagName}>`;
+  }
+
+  if (node.type === "root") {
+    return node.children ? node.children.map(astToHtml).join("") : "";
+  }
+
+  return "";
+}
+
+// Function to highlight code using lowlight
+function highlightCode(code: string, language: string = "ts"): string {
+  try {
+    const result = lowlight.highlight(language, code);
+    return astToHtml(result);
+  } catch (error) {
+    // Fallback to auto-detection
+    try {
+      const result = lowlight.highlightAuto(code);
+      return astToHtml(result);
+    } catch (autoError) {
+      console.warn("Code highlighting failed:", error, autoError);
+      return code;
+    }
+  }
+}
+
 
 function normalizeIndent(code: string) {
   const lines = code.split("\n");
@@ -60,6 +114,9 @@ export function ComponentShowcase({
       /* ignore */
     }
   };
+
+  const highlightedCode = React.useMemo(() => highlightCode(code), [code]);
+
 
   return (
     <div id={id} className="space-y-4">
@@ -127,8 +184,12 @@ export function ComponentShowcase({
           >
             <div className="border bg-muted/30">
               <div className="relative">
-                <pre className="overflow-x-auto p-4  bg-muted text-sm m-0">
-                  <code className="language-tsx block">{code}</code>
+                <pre className="max-h-[200px] overflow-y-auto overflow-x-auto p-4 bg-muted text-sm m-0">
+                  <code
+                    className="language-tsx block hljs"
+                    dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                  />
+
                 </pre>
                 <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-b from-muted/30 to-transparent pointer-events-none" />
               </div>

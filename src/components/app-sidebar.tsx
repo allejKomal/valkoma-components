@@ -86,11 +86,34 @@ const data = {
       title: "Alert",
       url: "/alert",
       icon: BookOpen,
-      items: [],
+      items: [
+        {
+          title: "Basic Alert",
+          url: "/alert#basic-alert",
+        },
+        {
+          title: "Alert with Icon",
+          url: "/alert#alert-with-icon",
+        },
+        {
+          title: "Dismissible Alert",
+          url: "/alert#dismissible-alert",
+        },
+        {
+          title: "Alert Variants",
+          url: "/alert#alert-variants",
+        },
+      ],
     },
     {
       title: "Button",
       url: "/button",
+      icon: BookOpen,
+      items: [],
+    },
+    {
+      title: "Button Group",
+      url: "/button-group",
       icon: BookOpen,
       items: [],
     },

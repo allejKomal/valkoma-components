@@ -10,9 +10,10 @@ import Home from "@/pages/home";
 import AccordionHome from "@/pages/accordion-home";
 import AlertHome from "@/pages/alert-home";
 import MultiSelectHome from "@/pages/multi-select-home";
+import ButtonGroupHome from "@/pages/button-group-home";
 
 export default function Layout() {
-  const [currentPage, setCurrentPage] = useState("multi-select");
+  const [currentPage, setCurrentPage] = useState("button-group");
   const [scrollTarget, setScrollTarget] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
@@ -32,6 +33,8 @@ export default function Layout() {
           setCurrentPage("multi-select");
         } else if (path === "/button") {
           setCurrentPage("button");
+        } else if (path === "/button-group") {
+          setCurrentPage("button-group");
         } else if (path === "/card") {
           setCurrentPage("card");
         }
@@ -90,7 +93,6 @@ export default function Layout() {
       });
     }, observerOptions);
 
-    // Observe all accordion sections
     const sections = [
       "basic-accordion",
       "bordered-accordion",
@@ -128,6 +130,10 @@ export default function Layout() {
         return <AlertHome />;
       case "multi-select":
         return <MultiSelectHome />;
+      case "button-group":
+        return (
+          <ButtonGroupHome />
+        );
       case "button":
         return (
           <div className="p-8 text-center">Button Component - Coming Soon</div>
