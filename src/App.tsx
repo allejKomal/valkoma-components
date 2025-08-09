@@ -2,7 +2,8 @@ import "./App.css";
 import "valkoma-package/dist/style.css";
 import { ThemeProvider } from "valkoma-package/hooks";
 import { ModeToggle } from "valkoma-package/design-system";
-import Layout from "./components/layout";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <div className="fixed bottom-4 right-4 z-50">
         <ModeToggle />
       </div>
-      <Layout />
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }

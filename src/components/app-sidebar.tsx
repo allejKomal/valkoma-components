@@ -1,129 +1,27 @@
-import * as React from "react";
-import { BookOpen, Frame, LifeBuoy, Map, PieChart, Send } from "lucide-react";
-
-import { NavMain } from "./nav-main";
-import { NavProjects } from "./nav-projects";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "valkoma-package/primitive";
+import { BookOpen, Frame, LifeBuoy, Map, PieChart, Send } from "lucide-react";
+import { NavMain } from "./nav-main";
+import { NavProjects } from "./nav-projects";
+import { NavSecondary } from "./nav-secondary";
+import { NavUser } from "./nav-user";
+import { useNavigation } from "@/context/navigation-context";
+import { useLocation } from "react-router-dom";
 
-const data = {
+// Static data that doesn't change
+const staticData = {
   user: {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  navMain: [
-    {
-      title: "Home",
-      url: "/",
-      icon: BookOpen,
-      isActive: false,
-      items: [],
-    },
-    {
-      title: "Accordion",
-      url: "/accordion",
-      icon: BookOpen,
-      isActive: true,
-      items: [
-        {
-          title: "Basic Accordion",
-          url: "/accordion#basic-accordion",
-        },
-        {
-          title: "Bordered Accordion",
-          url: "/accordion#bordered-accordion",
-        },
-        {
-          title: "Bottom Border Accordion",
-          url: "/accordion#bottom-border-accordion",
-        },
-        {
-          title: "Trigger Left Accordion",
-          url: "/accordion#trigger-left-accordion",
-        },
-        {
-          title: "Accordion with Icon",
-          url: "/accordion#accordion-with-icon",
-        },
-        {
-          title: "Multiple Accordions",
-          url: "/accordion#multiple-accordions",
-        },
-        {
-          title: "Styled Accordion",
-          url: "/accordion#styled-accordion",
-        },
-        {
-          title: "Disabled Accordion",
-          url: "/accordion#disabled-accordion",
-        },
-        {
-          title: "Custom Trigger Props",
-          url: "/accordion#custom-trigger-accordion",
-        },
-        {
-          title: "Dynamic Value",
-          url: "/accordion#dynamic-value-accordion",
-        },
-        {
-          title: "Nested Accordions",
-          url: "/accordion#nested-accordion",
-        },
-        {
-          title: "Props Documentation",
-          url: "/accordion#props-documentation",
-        },
-      ],
-    },
-    {
-      title: "Alert",
-      url: "/alert",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Basic Alert",
-          url: "/alert#basic-alert",
-        },
-        {
-          title: "Alert with Icon",
-          url: "/alert#alert-with-icon",
-        },
-        {
-          title: "Dismissible Alert",
-          url: "/alert#dismissible-alert",
-        },
-        {
-          title: "Alert Variants",
-          url: "/alert#alert-variants",
-        },
-      ],
-    },
-    {
-      title: "Button",
-      url: "/button",
-      icon: BookOpen,
-      items: [],
-    },
-    {
-      title: "Button Group",
-      url: "/button-group",
-      icon: BookOpen,
-      items: [],
-    },
-    {
-      title: "Card",
-      url: "/card",
-      icon: BookOpen,
-      items: [],
-    },
-  ],
   navSecondary: [
     {
       title: "Support",
@@ -155,23 +53,40 @@ const data = {
   ],
 };
 
-export function AppSidebar({
-  currentPage = "accordion",
-  activeSection = null,
-  ...props
-}: React.ComponentProps<typeof Sidebar> & {
-  currentPage?: string;
-  activeSection?: string | null;
-}) {
-  // Update the navMain data with current state
-  const updatedNavMain = data.navMain.map(item => ({
-    ...item,
-    isActive: item.url === `/${currentPage}`,
-    items: item.items?.map(subItem => ({
-      ...subItem,
-      isActive: Boolean(activeSection && subItem.url.includes(`#${activeSection}`))
-    }))
-  }));
+// Define the main pages structure
+const mainPages = [
+  { path: "/alert", title: "Alert", icon: BookOpen },
+  { path: "/accordion", title: "Accordion", icon: BookOpen },
+  { path: "/button", title: "Button", icon: BookOpen },
+  { path: "/button-group", title: "Button Group", icon: BookOpen },
+  { path: "/checkbox", title: "Checkbox", icon: BookOpen },
+  { path: "/checkbox-group", title: "Checkbox Group", icon: BookOpen },
+  { path: "/checkbox-hierarchical", title: "Checkbox Hierarchical", icon: BookOpen },
+  { path: "/multi-select", title: "Multi Select", icon: BookOpen },
+  { path: "/card", title: "Card", icon: BookOpen },
+];
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { pages } = useNavigation();
+  const location = useLocation();
+
+  // Build navigation structure dynamically
+  const navMain = mainPages.map((page) => {
+    const registeredPage = pages.find((p) => p.path === page.path);
+
+    return {
+      title: page.title,
+      url: page.path,
+      icon: page.icon,
+      isActive: page.path === location.pathname,
+      items:
+        registeredPage?.sections.map((section) => ({
+          title: section.title,
+          url: section.url,
+          isActive: location.hash === `#${section.id}`,
+        })) || [],
+    };
+  });
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -181,23 +96,28 @@ export function AppSidebar({
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
                 <a href="#">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                    <BookOpen className="size-4" />
+                  </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">alleJKomal</span>
-                    <span className="truncate text-xs">valkoma-package</span>
+                    <span className="truncate font-semibold">Valkoma</span>
+                    <span className="truncate text-xs">Component Library</span>
                   </div>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
-        <SidebarContent className="flex-1 flex flex-col">
-          <div className="flex-1 overflow-y-auto pb-4">
-            <NavMain items={updatedNavMain} />
+        <SidebarContent className="flex-1 overflow-hidden">
+          <div className="overflow-y-auto">
+            <NavMain items={navMain} />
           </div>
-          <div className="flex-shrink-0">
-            <NavProjects projects={data.projects} />
-          </div>
+          <NavProjects projects={staticData.projects} />
+          <NavSecondary items={staticData.navSecondary} className="mt-auto" />
         </SidebarContent>
+        <SidebarFooter className="flex-shrink-0">
+          <NavUser user={staticData.user} />
+        </SidebarFooter>
       </div>
     </Sidebar>
   );

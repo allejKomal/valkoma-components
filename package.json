@@ -30,7 +30,7 @@
     "react-syntax-highlighter": "^15.6.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11",
-    "valkoma-package": "^0.1.17"
+    "valkoma-package": "^0.1.21"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

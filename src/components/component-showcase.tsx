@@ -2,67 +2,12 @@
 
 import * as React from "react";
 import jsxToString from "react-element-to-jsx-string";
-import { createLowlight } from "lowlight";
-// import 'highlight.js/styles/a11y-dark.css';
-import ts from "highlight.js/lib/languages/typescript";
+
 import {
   Button,
-  Collapsible,
-  CollapsibleContent,
 } from "valkoma-package/primitive";
-import { Copy, Check, Code } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const lowlight = createLowlight();
-lowlight.register("ts", ts);
-
-
-interface ASTNode {
-  type: string;
-  value?: string;
-  tagName?: string;
-  properties?: { className?: string[] };
-  children?: ASTNode[];
-}
-
-// Function to convert lowlight AST to HTML string
-function astToHtml(node: ASTNode): string {
-  if (node.type === "text") {
-    return node.value || "";
-  }
-
-  if (node.type === "element") {
-    const className = node.properties?.className
-      ? ` class="${node.properties.className.join(" ")}"`
-      : "";
-    const children = node.children ? node.children.map(astToHtml).join("") : "";
-    return `<${node.tagName}${className}>${children}</${node.tagName}>`;
-  }
-
-  if (node.type === "root") {
-    return node.children ? node.children.map(astToHtml).join("") : "";
-  }
-
-  return "";
-}
-
-// Function to highlight code using lowlight
-function highlightCode(code: string, language: string = "ts"): string {
-  try {
-    const result = lowlight.highlight(language, code);
-    return astToHtml(result);
-  } catch (error) {
-    // Fallback to auto-detection
-    try {
-      const result = lowlight.highlightAuto(code);
-      return astToHtml(result);
-    } catch (autoError) {
-      console.warn("Code highlighting failed:", error, autoError);
-      return code;
-    }
-  }
-}
-
 
 function normalizeIndent(code: string) {
   const lines = code.split("\n");
@@ -90,20 +35,21 @@ export function ComponentShowcase({
   childrenClassName?: string;
   id?: string;
 }) {
-  const [showCode, setShowCode] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
 
-  const raw =
-    typeof codeProp === "string"
-      ? codeProp
-      : jsxToString(children, {
-        showFunctions: true,
-        useBooleanShorthandSyntax: false,
-        sortProps: false,
-        tabStop: 2,
-      });
-
-  const code = normalizeIndent(raw);
+  const code = React.useMemo(() => {
+    const raw =
+      typeof codeProp === "string"
+        ? codeProp
+        : jsxToString(children, {
+          showFunctions: true,
+          useBooleanShorthandSyntax: false,
+          sortProps: false,
+          tabStop: 2,
+        });
+    
+    return normalizeIndent(raw);
+  }, [codeProp, children]);
 
   const copyToClipboard = async () => {
     try {
@@ -115,29 +61,18 @@ export function ComponentShowcase({
     }
   };
 
-  const highlightedCode = React.useMemo(() => highlightCode(code), [code]);
-
-
   return (
-    <div id={id} className="space-y-4">
+    <div id={id} data-component-showcase className="space-y-4">
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <h3 data-showcase-title className="text-lg font-semibold">{title}</h3>
           <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowCode(!showCode)}
-              className="h-8 px-2 text-xs btn-smooth"
-            >
-              <Code className="h-3 w-3 mr-1" />
-              {showCode ? "Hide code" : "Show code"}
-            </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={copyToClipboard}
               className="h-8 px-2 btn-smooth"
+              title="Copy code to clipboard"
             >
               {copied ? (
                 <Check className="h-3 w-3 text-green-500 smooth-transition" />
@@ -177,25 +112,6 @@ export function ComponentShowcase({
             <span className="absolute -bottom-[20px] -right-px h-[20px] w-px bg-border" />
           </div>
         </div>
-        <Collapsible open={showCode} onOpenChange={setShowCode}>
-          <CollapsibleContent
-            className="code-reveal"
-            data-state={showCode ? "open" : "closed"}
-          >
-            <div className="border bg-muted/30">
-              <div className="relative">
-                <pre className="max-h-[200px] overflow-y-auto overflow-x-auto p-4 bg-muted text-sm m-0">
-                  <code
-                    className="language-tsx block hljs"
-                    dangerouslySetInnerHTML={{ __html: highlightedCode }}
-                  />
-
-                </pre>
-                <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-b from-muted/30 to-transparent pointer-events-none" />
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
       </div>
     </div>
   );

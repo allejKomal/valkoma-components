@@ -2,8 +2,12 @@ import { Accordion } from "valkoma-package/design-system";
 import { ComponentShowcase } from "@/components/component-showcase";
 import { PropsTable } from "@/components/props-table";
 import { ArrowRightIcon, InfoIcon } from "lucide-react";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
+import { useRegisterPageSections } from "@/context/navigation-context";
 
 export default function AccordionHome() {
+    useAutoScroll();
+    useRegisterPageSections("Accordion");
     return (
         <div className="min-h-screen">
             {/* Header */}
@@ -72,22 +76,6 @@ export default function AccordionHome() {
                         titleIcon={<InfoIcon size={16} />}
                         content="Icons add clarity to your accordions."
                     />
-                </ComponentShowcase>
-
-                <ComponentShowcase
-                    id="multiple-accordions"
-                    title="Multiple Independent Accordions"
-                    description="Several independent accordions rendered together. Each can be opened or closed without affecting others."
-                >
-                    <div className="flex flex-col gap-4">
-                        <Accordion title="Item 1" content="Content 1" />
-                        <Accordion title="Item 2" content="Content 2" variant="bordered" />
-                        <Accordion
-                            title="Item 3"
-                            content="Content 3"
-                            triggerPosition="left"
-                        />
-                    </div>
                 </ComponentShowcase>
 
                 <ComponentShowcase

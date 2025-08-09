@@ -1,6 +1,9 @@
-import { MultiSelect, type Option } from "@/components/ds/multi-select";
+import { MultiSelect, type Option } from "valkoma-package/design-system";
 import { Rabbit } from "lucide-react";
 import { useState } from "react";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
+import { useRegisterPageSections } from "@/context/navigation-context";
+
 const options: Option[] = [
     { label: "Apple", value: "apple", category: "Fruits", icon: <Rabbit /> },
     { label: "Banana", value: "banana", category: "Fruits", icon: <Rabbit /> },
@@ -19,6 +22,8 @@ const options: Option[] = [
 
 
 export default function MultiSelectHome() {
+    useAutoScroll();
+    useRegisterPageSections("Multi Select");
     const [selected, setSelected] = useState<Option[]>([]);
 
     return (
@@ -37,8 +42,8 @@ export default function MultiSelectHome() {
                     // disabled
                     placeholder="Select items..."
                     groupedView={false}
-                // warningText="This is a warning message."
-                errorText="This is an error message."
+                    // warningText="This is a warning message."
+                    errorText="This is an error message."
                 // informationText="This Fis an informational message."
                 />
 

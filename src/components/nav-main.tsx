@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronRight, type LucideIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import {
   Collapsible,
@@ -32,16 +33,7 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const handleNavigation = (url: string) => {
-    if (url.startsWith('/')) {
-      const [path, target] = url.split('#');
-      window.postMessage({
-        type: 'navigate',
-        path: path || '/',
-        target: target || null
-      }, '*');
-    }
-  };
+  // No need for handleNavigation anymore since we're using React Router Link
 
   return (
     <SidebarGroup>
@@ -50,16 +42,15 @@ export function NavMain({
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton 
-                asChild 
+              <SidebarMenuButton
+                asChild
                 tooltip={item.title}
-                onClick={() => handleNavigation(item.url)}
                 className={item.isActive ? "bg-accent text-accent-foreground" : ""}
               >
-                <a href={item.url} onClick={(e) => e.preventDefault()}>
+                <Link to={item.url}>
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>
@@ -73,14 +64,13 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton 
+                          <SidebarMenuSubButton
                             asChild
-                            onClick={() => handleNavigation(subItem.url)}
                             className={subItem.isActive ? "bg-accent text-accent-foreground" : ""}
                           >
-                            <a href={subItem.url} onClick={(e) => e.preventDefault()}>
+                            <Link to={subItem.url}>
                               <span>{subItem.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
